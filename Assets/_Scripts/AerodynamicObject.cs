@@ -53,12 +53,16 @@ public class AerodynamicObject : MonoBehaviour
         }
 
         // angular decay
+        // simple model: torque opposite to angular velocity -k * w
         rb.AddTorque(-angularVelocity * angularDragScale);
     }
 
     float GetLiftCoefficient(float spinRatio)
     {
         if (spinRatio <= 0) return 0f;
+        // Curve fit: Cl rises and caps at roughly 0.35 for high spin ratios
+        // This is physically more accurate than a simple linear multiplier
+        // 0.35 is a typical max Cl for a sphere before turbulence chaos ensues
         return Mathf.Min(0.35f, spinRatio);
     }
 }
